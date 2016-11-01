@@ -16,8 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    m_symbolPlayerOne       = CNT_SYMBOL_DAGGER;
-    m_symbolPlayerSecond    = CNT_SYMBOL_ZERO;
+    m_welcomeForm = new WelcomeForm();
+    m_welcomeForm->show();
 
     m_playerOne     = true;
     m_playerSecond  = false;
@@ -28,6 +28,9 @@ MainWindow::MainWindow(QWidget *parent) :
     {
         m_Field[i].resize(CNT_COLS);
     }
+
+    connect(m_welcomeForm, SIGNAL(CompleteRegistration()), this, SLOT(GetUserDate()));
+
 }
 
 MainWindow::~MainWindow()
@@ -35,18 +38,34 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::GetUserDate()
+{
+    m_userOne       = m_welcomeForm->m_oneUser;
+    m_userSecond    = m_welcomeForm->m_secondUser;
+
+    m_symbolPlayerOne       = m_userOne.m_symbol;
+    m_symbolPlayerSecond    = m_userSecond.m_symbol;
+
+    m_welcomeForm->close();
+    this->show();
+}
+
 char MainWindow::ExecuteMove(QPushButton &i_button)
 {
     if (m_playerOne)
     {
-        i_button.setText(QString(m_symbolPlayerOne));
+        ui->NamePlayer->setText(m_userOne.m_name);
+        i_button.setText(QString(m_userOne.m_symbol));
+        i_button.setEnabled(false);
         m_playerOne     = false;
         m_playerSecond  = true;
         return m_symbolPlayerOne;
     }
     else
     {
-        i_button.setText(QString(m_symbolPlayerSecond));
+        ui->NamePlayer->setText(m_userSecond.m_name);
+        i_button.setText(QString(m_userSecond.m_symbol));
+        i_button.setEnabled(false);
         m_playerSecond  = false;
         m_playerOne     = true;
         return m_symbolPlayerSecond;
@@ -67,10 +86,11 @@ bool MainWindow::VerifyWinner(int i_rows, int i_cols, char i_symbol)
                 ++_quentityMathes;
             }
         }
-    }
-    if (_quentityMathes == CNT_QUENTITY_MATHES)
-    {
-        return true;
+        if (_quentityMathes == CNT_QUENTITY_MATHES)
+        {
+            return true;
+        }
+        _quentityMathes = 0;
     }
 
     _quentityMathes = 0;
@@ -78,12 +98,18 @@ bool MainWindow::VerifyWinner(int i_rows, int i_cols, char i_symbol)
     {
         for (int j = 0; j < CNT_ROWS; j++)
         {
-            if (m_Field[i][j] == i_symbol)
+            if (m_Field[j][i] == i_symbol)
             {
                 ++_quentityMathes;
             }
         }
+        if (_quentityMathes == CNT_QUENTITY_MATHES)
+        {
+            return true;
+        }
+        _quentityMathes = 0;
     }
+
     if (_quentityMathes == CNT_QUENTITY_MATHES)
     {
         return true;
@@ -103,7 +129,7 @@ bool MainWindow::VerifyWinner(int i_rows, int i_cols, char i_symbol)
     }
 
     _quentityMathes = 0;
-    for (int i = CNT_ROWS - 1; i > 0; i--)
+    for (int i = CNT_ROWS - 1; i >= 0; i--)
     {
         if (m_Field[i][i] == i_symbol)
         {
@@ -123,70 +149,138 @@ void MainWindow::on_btn_1_clicked()
     char _symbolPlayer = ExecuteMove(*ui->btn_1);
     if (VerifyWinner(0, 0, _symbolPlayer))
     {
-        QMessageBox::information(this, "Winner", "Winner : owl");
+        if (_symbolPlayer == m_userOne.m_symbol)
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userOne.m_name);
+        }
+        else
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userSecond.m_name);
+        }
     }
 }
 
 void MainWindow::on_btn_2_clicked()
 {
-    if (VerifyWinner(0, 1, ExecuteMove(*ui->btn_2)))
+    char _symbolPlayer = ExecuteMove(*ui->btn_2);
+    if (VerifyWinner(0, 1, _symbolPlayer))
     {
-        QMessageBox::information(this, "Winner", "Winner : owl");
+        if (_symbolPlayer == m_userOne.m_symbol)
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userOne.m_name);
+        }
+        else
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userSecond.m_name);
+        }
     }
 }
 
 void MainWindow::on_btn_3_clicked()
 {
-    if (VerifyWinner(0, 2, ExecuteMove(*ui->btn_3)))
+    char _symbolPlayer = ExecuteMove(*ui->btn_3);
+    if (VerifyWinner(0, 2, _symbolPlayer))
     {
-        QMessageBox::information(this, "Winner", "Winner : owl");
-    }
+        if (_symbolPlayer == m_userOne.m_symbol)
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userOne.m_name);
+        }
+        else
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userSecond.m_name);
+        }    }
 }
 
 void MainWindow::on_btn_4_clicked()
 {
-    if (VerifyWinner(1, 0, ExecuteMove(*ui->btn_4)))
+    char _symbolPlayer = ExecuteMove(*ui->btn_4);
+    if (VerifyWinner(1, 0, _symbolPlayer))
     {
-        QMessageBox::information(this, "Winner", "Winner : owl");
-    }
+        if (_symbolPlayer == m_userOne.m_symbol)
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userOne.m_name);
+        }
+        else
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userSecond.m_name);
+        }    }
 }
 
 void MainWindow::on_btn_5_clicked()
 {
-    if (VerifyWinner(1, 1, ExecuteMove(*ui->btn_5)))
+    char _symbolPlayer = ExecuteMove(*ui->btn_5);
+    if (VerifyWinner(1, 1, _symbolPlayer))
     {
-        QMessageBox::information(this, "Winner", "Winner : owl");
-    }
+        if (_symbolPlayer == m_userOne.m_symbol)
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userOne.m_name);
+        }
+        else
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userSecond.m_name);
+        }   }
 }
 
 void MainWindow::on_btn_6_clicked()
 {
-    if (VerifyWinner(1, 2, ExecuteMove(*ui->btn_6)))
+    char _symbolPlayer = ExecuteMove(*ui->btn_6);
+    if (VerifyWinner(1, 2, _symbolPlayer))
     {
-        QMessageBox::information(this, "Winner", "Winner : owl");
+        if (_symbolPlayer == m_userOne.m_symbol)
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userOne.m_name);
+        }
+        else
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userSecond.m_name);
+        }
     }
 }
 
 void MainWindow::on_btn_7_clicked()
 {
-    if (VerifyWinner(2, 0, ExecuteMove(*ui->btn_7)))
+    char _symbolPlayer = ExecuteMove(*ui->btn_7);
+    if (VerifyWinner(2, 0, _symbolPlayer))
     {
-        QMessageBox::information(this, "Winner", "Winner : owl");
+        if (_symbolPlayer == m_userOne.m_symbol)
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userOne.m_name);
+        }
+        else
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userSecond.m_name);
+        }
     }
 }
 
 void MainWindow::on_btn_8_clicked()
 {
-    if (VerifyWinner(2, 1, ExecuteMove(*ui->btn_8)))
+    char _symbolPlayer = ExecuteMove(*ui->btn_8);
+    if (VerifyWinner(2, 1, _symbolPlayer))
     {
-        QMessageBox::information(this, "Winner", "Winner : owl");
+        if (_symbolPlayer == m_userOne.m_symbol)
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userOne.m_name);
+        }
+        else
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userSecond.m_name);
+        }
     }
 }
 
 void MainWindow::on_btn_9_clicked()
 {
-    if (VerifyWinner(2, 2, ExecuteMove(*ui->btn_9)))
+    char _symbolPlayer = ExecuteMove(*ui->btn_9);
+    if (VerifyWinner(2, 2, _symbolPlayer))
     {
-        QMessageBox::information(this, "Winner", "Winner : owl");
+        if (_symbolPlayer == m_userOne.m_symbol)
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userOne.m_name);
+        }
+        else
+        {
+            QMessageBox::information(this, "Winner", "Winner :" + m_userSecond.m_name);
+        }
     }
 }

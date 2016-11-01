@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QPushButton>
 
+#include "welcomeform.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -20,6 +22,8 @@ public:
     bool VerifyWinner(int i_rows, int i_cols, char i_symbol);
 
 private slots:
+    void GetUserDate();
+
     void on_btn_1_clicked();
 
     void on_btn_2_clicked();
@@ -45,6 +49,11 @@ private:
     char m_symbolPlayerOne;
     char m_symbolPlayerSecond;
     std::vector<std::vector<char>> m_Field;
+
+    WelcomeForm::User m_userOne;
+    WelcomeForm::User m_userSecond;
+
+    WelcomeForm*    m_welcomeForm;
 
 };
 
