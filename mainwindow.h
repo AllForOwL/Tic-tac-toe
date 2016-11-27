@@ -42,13 +42,16 @@ private slots:
 
     void on_btn_9_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
+    int  m_quentityCourses;
     bool m_playerOne;
     bool m_playerSecond;
     char m_symbolPlayerOne;
     char m_symbolPlayerSecond;
-    std::vector<std::vector<char>> m_Field;
+    std::vector<std::vector<char>> m_Field; // двухвимірний контейнер
 
     WelcomeForm::User m_userOne;
     WelcomeForm::User m_userSecond;

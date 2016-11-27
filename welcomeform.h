@@ -15,10 +15,11 @@ public:
     explicit WelcomeForm(QWidget *parent = 0);
     ~WelcomeForm();
 
+    // створюємо структуру для користувача
     struct User
     {
-        QString m_name;
-        char    m_symbol;
+        QString m_name;     // ім'я
+        char    m_symbol;   // символ(Х або 0)
     };
 
 

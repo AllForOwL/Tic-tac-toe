@@ -17,20 +17,20 @@ WelcomeForm::~WelcomeForm()
 
 void WelcomeForm::on_pushButton_clicked()
 {
-    if (m_quentityRegister == 0)
+    if (m_quentityRegister == 0)    // якщо реєструвється перший користувач
     {
         ++m_quentityRegister;
 
-        m_oneUser.m_name    = ui->lineEdit->text();
-        if (ui->radioButton->isChecked())
+        m_oneUser.m_name    = ui->lineEdit->text(); // зчитуємо ім'я користувача
+        if (ui->radioButton->isChecked())   // якщо вибраний символ є Х
         {
-            m_oneUser.m_symbol = 'X';
-            ui->radioButton->setEnabled(false);
-            ui->radioButton_2->setChecked(true);
-            ui->radioButton_2->setEnabled(false);
-            ui->lineEdit->clear();
+            m_oneUser.m_symbol = 'X';              // задаємо для користувача символ Х
+            ui->radioButton->setEnabled(false);    // блокуємо вибір Х
+            ui->radioButton_2->setChecked(true);   // вибираємо 0 для другого
+            ui->radioButton_2->setEnabled(false);  // блокуємо вибір 0
+            ui->lineEdit->clear();                 // очищуємо поле для імені
         }
-        else
+        else                                // аналогічно до вибору Х
         {
             m_oneUser.m_symbol = '0';
             ui->radioButton_2->setEnabled(false);
@@ -39,18 +39,18 @@ void WelcomeForm::on_pushButton_clicked()
             ui->lineEdit->clear();
         }
     }
-    else
+    else                            // якщо реєструвється другий користувач
     {
-        m_secondUser.m_name = ui->lineEdit->text();
+        m_secondUser.m_name = ui->lineEdit->text(); // зчитуємо ім'я користувача
         if (ui->radioButton->isChecked())
         {
-            m_secondUser.m_symbol = 'X';
+            m_secondUser.m_symbol = 'X';    // задаємо для користувача символ Х
         }
         else
         {
-            m_secondUser.m_symbol = '0';
+            m_secondUser.m_symbol = '0';    // задаємо для користувача символ 0
         }
 
-        emit CompleteRegistration();
+        emit CompleteRegistration();    // сигнал для події відкрити другу форму
     }
 }
